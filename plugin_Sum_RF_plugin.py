@@ -13,7 +13,7 @@ toolset.registerGuiMenuButton(
     icon=None,
     applicableModules=['Visualization'],
     version='1.0',
-    author='Matthias Ernst, Dassault Systemes Germany',
+    author='Matthias Ernst',
     description='This Plug-in calculates the sum of reaction forces coming from many nodes. '\
                  '\nIt takes either all displayed nodes or one set. When used with displayed nodes - hide irrelevant elements/nodes to improve runtime.'\
                  '\nIt uses either only the currently displayed frame or each frame of all active general steps. '\
