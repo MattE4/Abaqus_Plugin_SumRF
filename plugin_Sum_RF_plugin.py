@@ -25,6 +25,6 @@ toolset.registerGuiMenuButton(
                 '\n    1. Use coupling with field and/or history output request'\
                 '\n    2. Use Report > Field Output... in postprocessing'\
                 '\n    3. For a small number of nodes use Create XY Data -> ODB Field Output ... -> Save and use the Sum operation'\
-                 '\n\nThis Plug-In is not an official Dassault Systemes product.',
+                 '\n\nUsage at your own risk.',
     helpUrl='N/A'
 )
