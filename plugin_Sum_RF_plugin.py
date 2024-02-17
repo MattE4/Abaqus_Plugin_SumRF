@@ -13,7 +13,7 @@ toolset.registerGuiMenuButton(
     icon=None,
     applicableModules=['Visualization'],
     version='1.0',
-    author='Matthias Ernst',
+    author='Matthias Ernst, Dassault Systemes Germany',
     description='This Plug-in calculates the sum of reaction forces coming from many nodes. '\
                  '\nIt takes either all displayed nodes or one set. When used with displayed nodes - hide irrelevant elements/nodes to improve runtime.'\
                  '\nIt uses either only the currently displayed frame or each frame of all active general steps. '\
@@ -25,6 +25,6 @@ toolset.registerGuiMenuButton(
                 '\n    1. Use coupling with field and/or history output request'\
                 '\n    2. Use Report > Field Output... in postprocessing'\
                 '\n    3. For a small number of nodes use Create XY Data -> ODB Field Output ... -> Save and use the Sum operation'\
-                 '\n\nUsage at your own risk.',
+                 '\n\nThis Plug-In is not an official Dassault Systemes product.',
     helpUrl='N/A'
 )

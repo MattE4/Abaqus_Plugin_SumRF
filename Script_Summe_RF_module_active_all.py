@@ -1,9 +1,13 @@
+from __future__ import print_function
 from abaqus import *
 from abaqusConstants import *
 from caeModules import visualization
 import displayGroupOdbToolset as dgo
 from numpy import concatenate
-from itertools import izip
+try:
+	from itertools import izip
+except:
+	pass
 from timeit import default_timer
 
 
@@ -34,22 +38,22 @@ def SumRF_active_all(xset):
     # show initial regions again
     if xset != None:
         vps.odbDisplay.displayGroup.undoLast()
-        print '\nInfo: Sound may have appeared, since node set was shortly displayed at contour plot mode. Ignore it.'
+        print('\nInfo: Sound may have appeared, since node set was shortly displayed at contour plot mode. Ignore it.')
     
-    print '\n*********************************************'
-    print 'Odb name: ', odbName_short
+    print('\n*********************************************')
+    print('Odb name:', odbName_short)
     if xset != None:
-        print 'Node set name: ', xset
+        print('Node set name:', xset)
     
     # get number of active nodes
     numnodes = 0
     for i in nodelist.keys():
         numnodes = numnodes + len(nodelist[i])
     if numnodes == 0:
-        print 'Error: No active nodes'
+        print('Error: No active nodes')
         return
     else:
-        print 'Number of active nodes: ', numnodes
+        print('Number of active nodes:', numnodes)
     
     # get active steps
     active_steps = []
@@ -60,21 +64,21 @@ def SumRF_active_all(xset):
     use_steps = []
     for i in odb.steps.keys():
         if odb.steps[i].name not in active_steps:
-            print odb.steps[i].name+': Ignored. Step is inactive'
+            print(odb.steps[i].name+': Ignored. Step is inactive')
             continue
         if odb.steps[i].procedure.find('PERTURBATION') > -1:
-            print odb.steps[i].name+': Perturbation steps are ignored'
+            print(odb.steps[i].name+': Perturbation steps are ignored')
             continue
         if odb.steps[i].procedure.find('MODAL') > -1:
-            print odb.steps[i].name+': Perturbation steps are ignored'
+            print(odb.steps[i].name+': Perturbation steps are ignored')
             continue
-        if odb.steps[i].domain <> TIME:
-            print odb.steps[i].name+': Ignored. Only time domain is supported'
+        if odb.steps[i].domain != TIME:
+            print(odb.steps[i].name+': Ignored. Only time domain is supported')
             continue
         if odb.steps[i].domain == TIME:
             use_steps.append(i)
     if len(use_steps) == 0:
-        print 'Found no valid steps'
+        print('Found no valid steps')
         return
     
     # get step time of valid steps
@@ -93,7 +97,7 @@ def SumRF_active_all(xset):
             try:
                 rforce = f.fieldOutputs['RF']
             except:
-                print 'No RF data available in this frame'
+                print('No RF data available in this frame')
                 #return
 
             sumrf1 = sumrf2 = sumrf3 = sumrfmag = sumrfmag_n = 0
@@ -126,7 +130,7 @@ def SumRF_active_all(xset):
                 list_indexes = []
                 for r,y in enumerate(instdict.values()):
                     if y == inst:
-                        list_indexes.append(instdict.keys()[r])
+                        list_indexes.append(list(instdict.keys())[r])
                 
                 # combine data of multiple bulkDataBlocks
                 for r,y in enumerate(list_indexes):
@@ -139,7 +143,10 @@ def SumRF_active_all(xset):
                 
                 # use nodelabels and rfdata to create dictionary
                 # labels are the keys, rfdata the value
-                zip_iterator = izip(nlabels.tolist(), rfdata.tolist())
+                try:
+                	zip_iterator = izip(nlabels.tolist(), rfdata.tolist())
+                except:
+                	zip_iterator = zip(nlabels.tolist(), rfdata.tolist())
                 rfdict = dict(zip_iterator)
     
                 # loop over displayed nodes of instance and get node data from dictionary
@@ -148,13 +155,14 @@ def SumRF_active_all(xset):
                         sumrf1 = sumrf1 + rfdict[n][0]
                         sumrf2 = sumrf2 + rfdict[n][1]
                     except:
-                        print 'No RF data at node', n
+                        print('No RF data at node', n)
+                        continue
                     try:
                         sumrf3 = sumrf3 + rfdict[n][2]
                         sumrfmag_n = sumrfmag_n + sqrt(rfdict[n][0]**2 + rfdict[n][1]**2 + rfdict[n][2]**2)
                     except:
                         sumrfmag_n = sumrfmag_n + sqrt(rfdict[n][0]**2 + rfdict[n][1]**2)
-                        #print 'No RF3 data at node', n
+                        #print('No RF3 data at node', n)
     
             # collect frame results into curves
             sumrfmag = sqrt(sumrf1**2+sumrf2**2+sumrf3**2)
@@ -179,13 +187,13 @@ def SumRF_active_all(xset):
             axis1QuantityType=xQuantity, axis2QuantityType=yQuantity, )
         session.XYData(name='RF-Mag', data=curverfmag_n, sourceDescription='from SumRF-Plugin for '+str(odbName_short), 
             axis1QuantityType=xQuantity, axis2QuantityType=yQuantity, )        
-        print '\nGenerated xy data. See XY Data Manager.'
+        print('\nGenerated xy data. See XY Data Manager.')
     else:
-        print '\nNo xy data were generated. Check previous warnings or errors.'
+        print('\nNo xy data were generated. Check previous warnings or errors.')
     
     stop = default_timer()
-    print '\nRuntime [s]: ', stop - start
-    print '\n'
+    print('\nRuntime [s]:', stop - start)
+    print('\n')
     
     
 #############################################################

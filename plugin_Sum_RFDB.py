@@ -17,10 +17,10 @@ odb = session.odbs[odbName]
 nsets = odb.rootAssembly.nodeSets.keys()
 insts = odb.rootAssembly.instances.keys()
 
-if insts > 0:
+if len(insts) > 0:
     for i in insts:
         insets = odb.rootAssembly.instances[i].nodeSets.keys()
-        if insets > 0:
+        if len(insets) > 0:
             for n in insets:
                 inset_name = str(i)+'.'+str(n)
                 nsets.append(inset_name)
